@@ -746,30 +746,44 @@ INT 21h
 #### **الكود**:
 
 ```
-.model small 
-.stack 100h 
-.data msg DB 'Enter a character: $' 
-.code main proc ; تهيئة DS 
-MOV AX, @data 
-MOV DS, AX ; طباعة رسالة "Enter a character" 
-MOV AH, 09h 
-MOV DX, OFFSET msg INT 21h ; قراءة حرف من المستخدم
-MOV AH, 01h 
+
+org 100h
+
+.data
+msg DB 'Enter a character: $'
+
+.code
+MOV AX, @data
+MOV DS, AX
+
+MOV AH, 09h
+MOV DX, OFFSET msg
 INT 21h
-MOV BL, AL ; خزن الحرف في BL ; طباعة سطر جديد 
-MOV AH, 02h 
-MOV DL, 0Dh ; Carriage Return
-INT 21h 
-MOV DL, 0Ah ; Line Feed
-INT 21h ; طباعة الحرف
-MOV AH, 02h 
-MOV DL, BL ; الحرف من BL 
-INT 21h ; إنهاء البرنامج 
-MOV AH, 4Ch 
-MOV AL, 00h 
-INT 21h 
-main endp
-end main
+
+
+MOV AH, 01h
+INT 21h  ;get char => 'AL'
+
+
+MOV BL, AL
+
+;Elshakl
+MOV AH, 02h
+MOV DL, 0Dh  
+INT 21h
+MOV DL, 0Ah 
+INT 21h
+
+
+MOV AH, 02h
+MOV DL, BL
+INT 21h
+
+
+MOV AH, 4Ch
+INT 21h
+
+ret
 ```
 
 
